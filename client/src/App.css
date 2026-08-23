@@ -1,0 +1,65 @@
+.app-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    height:44px;
+    padding:0 20px;
+    border:none;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.app-btn-primary{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:#fff;
+    box-shadow:0 8px 20px rgba(37,99,235,.3);
+}
+
+.app-btn-primary:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:0 12px 26px rgba(37,99,235,.4);
+}
+
+.app-btn-primary:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+}
+
+.app-btn-outline{
+    background:#fff;
+    color:#2563eb;
+    border:1px solid #dbe3ef;
+}
+
+.app-btn-outline:hover{
+    border-color:#2563eb;
+    background:#f8fafc;
+}
+
+.app-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:18px;
+    transition:.2s;
+}
+
+.app-card:hover{
+    border-color:#c7d2fe;
+    box-shadow:0 8px 20px rgba(15,23,42,.06);
+}
+
+.app-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:16px;
+}
+
+.text-muted{
+    color:#94a3b8;
+    font-size:13px;
+}
