@@ -1,16 +1,39 @@
-# React + Vite
+# SyncSpace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time collaborative document workspace — think Google Docs, built from scratch.
 
-Currently, two official plugins are available:
+🔗 **Live Demo:** https://sync-space-gilt.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- 🔐 User authentication (JWT-based login/register)
+- 📄 Create, edit, and delete documents
+- ⚡ Real-time collaborative editing (multiple users, same document, live sync)
+- 👥 Document sharing with role-based access (editor/viewer)
+- 🟢 Live presence — see who's currently viewing a document
+- 💾 Auto-save
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+**Frontend:** React, Vite, React Router, Socket.io-client
+**Backend:** Node.js, Express, Socket.io, JWT
+**Database:** MongoDB (Mongoose)
+**Deployment:** Vercel (frontend), Render (backend), MongoDB Atlas (database)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Architecture
+
+- REST API for auth and document CRUD
+- WebSocket (Socket.io) for real-time document sync and presence
+- Protected routes on both frontend and backend
+- Document-level access control (owner vs. collaborator permissions)
+
+## Running Locally
+
+1. Clone the repo
+2. `cd client && npm install && npm run dev`
+3. `cd server && npm install && npm run dev`
+4. Set up `.env` files in both `client` and `server` (see `.env.example`)
+
+## Author
+
+Built by [Nithiya] — [ttps://github.com/Nithiya1912/linkedin.com/in/nithiya-rajakumari-k-809701341]
