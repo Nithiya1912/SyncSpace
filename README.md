@@ -36,4 +36,4 @@ A real-time collaborative document workspace — think Google Docs, built from s
 
 ## Author
 
-Built by [Nithiya](https://github.com/Nithiya1912)
+Built by [Nithiya] - [https://github.com/Nithiya1912]
