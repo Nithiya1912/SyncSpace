@@ -4,6 +4,7 @@ import { ProtectedRoute, PublicOnlyRoute } from "../components/common/ProtectedR
 
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Editor from "../pages/Editor/Editor";
 import Profile from "../pages/Profile/Profile";
@@ -30,7 +31,14 @@ export default function AppRoutes() {
             </PublicOnlyRoute>
           }
         />
-
+        <Route
+        path="/forgot-password"
+        element={
+          <PublicOnlyRoute>
+            <ForgotPassword />
+          </PublicOnlyRoute>
+          }
+        /> 
         {/* App pages: require a logged-in user */}
         <Route
           path="/dashboard"
