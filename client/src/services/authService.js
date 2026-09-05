@@ -1,10 +1,7 @@
 import { apiRequest, setToken } from "./api";
 
 export async function loginRequest({ email, password }) {
-  const data = await apiRequest("/auth/login", {
-    method: "POST",
-    body: { email, password },
-  });
+  const data = await apiRequest("/auth/login", { method: "POST", body: { email, password } });
   setToken(data.token);
   return data.user;
 }
@@ -25,4 +22,12 @@ export async function fetchCurrentUser() {
 
 export function logoutRequest() {
   setToken(null);
+}
+
+export async function forgotPasswordRequest(email) {
+  return apiRequest("/auth/forgot-password", { method: "POST", body: { email } });
+}
+
+export async function resetPasswordRequest(token, password) {
+  return apiRequest(`/auth/reset-password/${token}`, { method: "POST", body: { password } });
 }

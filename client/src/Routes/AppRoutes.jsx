@@ -5,6 +5,7 @@ import { ProtectedRoute, PublicOnlyRoute } from "../components/common/ProtectedR
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
+import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Editor from "../pages/Editor/Editor";
 import Profile from "../pages/Profile/Profile";
@@ -38,7 +39,15 @@ export default function AppRoutes() {
             <ForgotPassword />
           </PublicOnlyRoute>
           }
-        /> 
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <PublicOnlyRoute>
+              <ResetPassword />
+            </PublicOnlyRoute>
+          }
+        />
         {/* App pages: require a logged-in user */}
         <Route
           path="/dashboard"
