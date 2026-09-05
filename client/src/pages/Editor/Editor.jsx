@@ -9,9 +9,10 @@ const AVATAR_COLORS = ["#2563eb", "#db2777", "#059669", "#d97706", "#7c3aed"];
 export default function Editor() {
   const { docId } = useParams();
   const navigate = useNavigate();
+  const editorRef = useRef(null);
+  const isTypingRef = useRef(false);
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState("");
   const [error, setError] = useState("");
@@ -33,7 +34,7 @@ export default function Editor() {
     fetchDocument(docId)
       .then((doc) => {
         setTitle(doc.title);
-        setContent(doc.content);
+        if (editorRef.current) editorRef.current.innerHTML = doc.content || "";
       })
       .catch((err) => setError(err.message || "Failed to load document"))
       .finally(() => setLoading(false));
@@ -46,7 +47,11 @@ export default function Editor() {
 
     function handleRemoteChange({ title: remoteTitle, content: remoteContent }) {
       if (remoteTitle !== undefined) setTitle(remoteTitle);
-      if (remoteContent !== undefined) setContent(remoteContent);
+      // Don't overwrite the editor while the local user is actively typing —
+      // that would jump their cursor around mid-keystroke.
+      if (remoteContent !== undefined && !isTypingRef.current && editorRef.current) {
+        editorRef.current.innerHTML = remoteContent;
+      }
     }
 
     function handlePresence(users) {
@@ -74,6 +79,8 @@ export default function Editor() {
         } catch (err) {
           setError(err.message || "Failed to save");
           setSaveStatus("");
+        } finally {
+          isTypingRef.current = false;
         }
       }, 800);
     },
@@ -84,14 +91,22 @@ export default function Editor() {
     const value = e.target.value;
     setTitle(value);
     getSocket().emit("document-change", { docId, title: value });
-    scheduleSave(value, content);
+    scheduleSave(value, editorRef.current?.innerHTML || "");
   }
 
-  function handleContentChange(e) {
-    const value = e.target.value;
-    setContent(value);
-    getSocket().emit("document-change", { docId, content: value });
-    scheduleSave(title, value);
+  function handleEditorInput() {
+    isTypingRef.current = true;
+    const html = editorRef.current.innerHTML;
+    getSocket().emit("document-change", { docId, content: html });
+    scheduleSave(title, html);
+  }
+
+  // Formatting commands — execCommand is deprecated but still the simplest,
+  // widely-supported way to do rich text formatting without a heavy library.
+  function format(command, value = null) {
+    editorRef.current.focus();
+    document.execCommand(command, false, value);
+    handleEditorInput();
   }
 
   async function handleShare(e) {
@@ -119,6 +134,17 @@ export default function Editor() {
       .slice(0, 2)
       .toUpperCase();
   }
+
+  const toolbarBtn = {
+    border: "1px solid #e5e7eb",
+    background: "#fff",
+    borderRadius: 8,
+    width: 34,
+    height: 34,
+    cursor: "pointer",
+    fontSize: 14,
+    color: "#0f172a",
+  };
 
   if (loading) {
     return (
@@ -149,11 +175,7 @@ export default function Editor() {
             color: "#0f172a",
           }}
         />
-        <button
-          onClick={() => setShowShare((s) => !s)}
-          className="app-btn app-btn-outline"
-          style={{ whiteSpace: "nowrap" }}
-        >
+        <button onClick={() => setShowShare((s) => !s)} className="app-btn app-btn-outline" style={{ whiteSpace: "nowrap" }}>
           Share
         </button>
         <span className="text-muted" style={{ whiteSpace: "nowrap" }}>
@@ -161,7 +183,6 @@ export default function Editor() {
         </span>
       </div>
 
-      {/* Who's currently viewing this document */}
       {activeUsers.length > 0 && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
           <span className="text-muted" style={{ fontSize: 13 }}>Currently viewing:</span>
@@ -171,18 +192,10 @@ export default function Editor() {
                 key={u.id + i}
                 title={u.name}
                 style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
+                  width: 30, height: 30, borderRadius: "50%",
                   background: AVATAR_COLORS[i % AVATAR_COLORS.length],
-                  color: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  border: "2px solid #fff",
-                  marginLeft: i === 0 ? 0 : -8,
+                  color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontWeight: 700, border: "2px solid #fff", marginLeft: i === 0 ? 0 : -8,
                 }}
               >
                 {initials(u.name)}
@@ -195,37 +208,16 @@ export default function Editor() {
       {showShare && (
         <form
           onSubmit={handleShare}
-          style={{
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-            marginBottom: 16,
-            padding: 14,
-            background: "#f8fafc",
-            border: "1px solid #e5e7eb",
-            borderRadius: 12,
-            flexWrap: "wrap",
-          }}
+          style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 16, padding: 14, background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 12, flexWrap: "wrap" }}
         >
           <input
             type="email"
             placeholder="Person's email"
             value={shareEmail}
             onChange={(e) => setShareEmail(e.target.value)}
-            style={{
-              flex: 1,
-              minWidth: 200,
-              padding: "8px 12px",
-              border: "1px solid #dbe3ef",
-              borderRadius: 8,
-              color: "#0f172a",
-            }}
+            style={{ flex: 1, minWidth: 200, padding: "8px 12px", border: "1px solid #dbe3ef", borderRadius: 8, color: "#0f172a" }}
           />
-          <select
-            value={shareRole}
-            onChange={(e) => setShareRole(e.target.value)}
-            style={{ padding: "8px 12px", border: "1px solid #dbe3ef", borderRadius: 8 }}
-          >
+          <select value={shareRole} onChange={(e) => setShareRole(e.target.value)} style={{ padding: "8px 12px", border: "1px solid #dbe3ef", borderRadius: 8 }}>
             <option value="editor">Can edit</option>
             <option value="viewer">Can view</option>
           </select>
@@ -236,10 +228,24 @@ export default function Editor() {
         </form>
       )}
 
-      <textarea
-        value={content}
-        onChange={handleContentChange}
-        placeholder="Start writing…"
+      {/* Formatting toolbar */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        <button type="button" style={{ ...toolbarBtn, fontWeight: 700 }} onClick={() => format("bold")} title="Bold">B</button>
+        <button type="button" style={{ ...toolbarBtn, fontStyle: "italic" }} onClick={() => format("italic")} title="Italic">I</button>
+        <button type="button" style={{ ...toolbarBtn, textDecoration: "underline" }} onClick={() => format("underline")} title="Underline">U</button>
+        <button type="button" style={toolbarBtn} onClick={() => format("formatBlock", "H1")} title="Heading 1">H1</button>
+        <button type="button" style={toolbarBtn} onClick={() => format("formatBlock", "H2")} title="Heading 2">H2</button>
+        <button type="button" style={toolbarBtn} onClick={() => format("formatBlock", "P")} title="Paragraph">¶</button>
+        <button type="button" style={toolbarBtn} onClick={() => format("insertUnorderedList")} title="Bullet list">• List</button>
+        <button type="button" style={toolbarBtn} onClick={() => format("insertOrderedList")} title="Numbered list">1. List</button>
+      </div>
+
+      <div
+        ref={editorRef}
+        contentEditable
+        onInput={handleEditorInput}
+        onBlur={() => { isTypingRef.current = false; }}
+        suppressContentEditableWarning
         style={{
           width: "100%",
           minHeight: "60vh",
@@ -248,9 +254,9 @@ export default function Editor() {
           padding: 20,
           fontSize: 15,
           lineHeight: 1.6,
-          resize: "vertical",
           color: "#0f172a",
           background: "#fff",
+          outline: "none",
         }}
       />
     </AppShell>
