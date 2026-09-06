@@ -54,15 +54,15 @@ export default function Register() {
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <div className="register-container">
+      <div className="register-card">
         <div className="brand">
           <div className="logo-circle">S</div>
           <h1 className="logo">SyncSpace</h1>
           <p className="subtitle">Create your workspace account</p>
         </div>
 
-        {formError && <div className="error-banner">{formError}</div>}
+        {formError && <div className="form-error">{formError}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="input-group">
@@ -80,7 +80,7 @@ export default function Register() {
                 className={errors.name ? "has-error" : ""}
               />
             </div>
-            {errors.name && <span className="field-error">{errors.name}</span>}
+            {errors.name && <span className="form-error">{errors.name}</span>}
           </div>
 
           <div className="input-group">
@@ -98,12 +98,12 @@ export default function Register() {
                 className={errors.email ? "has-error" : ""}
               />
             </div>
-            {errors.email && <span className="field-error">{errors.email}</span>}
+            {errors.email && <span className="form-error">{errors.email}</span>}
           </div>
 
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <div className="input-icon">
+            <div className="input-icon password-wrapper">
               <FaLock className="left-icon" />
               <input
                 id="password"
@@ -124,12 +124,12 @@ export default function Register() {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-            {errors.password && <span className="field-error">{errors.password}</span>}
+            {errors.password && <span className="form-error">{errors.password}</span>}
           </div>
 
           <div className="input-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <div className="input-icon">
+            <div className="input-icon password-wrapper">
               <FaLock className="left-icon" />
               <input
                 id="confirmPassword"
@@ -150,15 +150,15 @@ export default function Register() {
                 {showConfirm ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-            {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
+            {errors.confirmPassword && <span className="form-error">{errors.confirmPassword}</span>}
           </div>
 
-          <button type="submit" className="login-button" disabled={submitting}>
+          <button type="submit" className="register-button" disabled={submitting}>
             {submitting ? <span className="spinner" /> : "Create Account"}
           </button>
         </form>
 
-        <p className="signup-text">
+        <p className="login-text">
           Already have an account? <Link to="/">Login</Link>
         </p>
       </div>

@@ -136,15 +136,15 @@ export default function Editor() {
   }
 
   const toolbarBtn = {
-    border: "1px solid #e5e7eb",
-    background: "#fff",
-    borderRadius: 8,
-    width: 34,
-    height: 34,
-    cursor: "pointer",
-    fontSize: 14,
-    color: "#0f172a",
-  };
+  border: "1px solid var(--border-color)",
+  background: "var(--bg-card)",
+  borderRadius: 8,
+  width: 34,
+  height: 34,
+  cursor: "pointer",
+  fontSize: 14,
+  color: "var(--text-main)",
+};
 
   if (loading) {
     return (
@@ -164,16 +164,16 @@ export default function Editor() {
           onChange={handleTitleChange}
           placeholder="Untitled document"
           style={{
-            border: "1px solid #e5e7eb",
-            borderRadius: 10,
-            fontSize: 20,
-            fontWeight: 600,
-            outline: "none",
-            flex: 1,
-            background: "#f8fafc",
-            padding: "10px 14px",
-            color: "#0f172a",
-          }}
+  border: "1px solid var(--border-color)",
+  borderRadius: 10,
+  fontSize: 20,
+  fontWeight: 600,
+  outline: "none",
+  flex: 1,
+  background: "var(--bg-elevated)",
+  padding: "10px 14px",
+  color: "var(--text-main)",
+}}
         />
         <button onClick={() => setShowShare((s) => !s)} className="app-btn app-btn-outline" style={{ whiteSpace: "nowrap" }}>
           Share
@@ -208,7 +208,7 @@ export default function Editor() {
       {showShare && (
         <form
           onSubmit={handleShare}
-          style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 16, padding: 14, background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 12, flexWrap: "wrap" }}
+          style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 16, padding: 14, background: "var(--bg-elevated)", border: "1px solid var(--border-color)", borderRadius: 12, flexWrap: "wrap" }}
         >
           <input
             type="email"
@@ -247,17 +247,17 @@ export default function Editor() {
         onBlur={() => { isTypingRef.current = false; }}
         suppressContentEditableWarning
         style={{
-          width: "100%",
-          minHeight: "60vh",
-          border: "1px solid #e5e7eb",
-          borderRadius: 14,
-          padding: 20,
-          fontSize: 15,
-          lineHeight: 1.6,
-          color: "#0f172a",
-          background: "#fff",
-          outline: "none",
-        }}
+  width: "100%",
+  minHeight: "60vh",
+  border: "1px solid var(--border-color)",
+  borderRadius: 14,
+  padding: 20,
+  fontSize: 15,
+  lineHeight: 1.6,
+  color: "var(--text-main)",
+  background: "var(--bg-card)",
+  outline: "none",
+}}
       />
     </AppShell>
   );
