@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback, useRef } from "react";
+import toast from "react-hot-toast";
 import AppShell from "../../components/common/AppShell";
 import { fetchDocument, updateDocument, shareDocument } from "../../services/documentService";
 import { getSocket } from "../../services/socket";
@@ -47,8 +48,6 @@ export default function Editor() {
 
     function handleRemoteChange({ title: remoteTitle, content: remoteContent }) {
       if (remoteTitle !== undefined) setTitle(remoteTitle);
-      // Don't overwrite the editor while the local user is actively typing —
-      // that would jump their cursor around mid-keystroke.
       if (remoteContent !== undefined && !isTypingRef.current && editorRef.current) {
         editorRef.current.innerHTML = remoteContent;
       }
@@ -78,6 +77,7 @@ export default function Editor() {
           setSaveStatus("saved");
         } catch (err) {
           setError(err.message || "Failed to save");
+          toast.error("Failed to save document");
           setSaveStatus("");
         } finally {
           isTypingRef.current = false;
@@ -101,8 +101,6 @@ export default function Editor() {
     scheduleSave(title, html);
   }
 
-  // Formatting commands — execCommand is deprecated but still the simplest,
-  // widely-supported way to do rich text formatting without a heavy library.
   function format(command, value = null) {
     editorRef.current.focus();
     document.execCommand(command, false, value);
@@ -118,9 +116,12 @@ export default function Editor() {
     try {
       await shareDocument(docId, shareEmail.trim(), shareRole);
       setShareMsg(`Shared with ${shareEmail} as ${shareRole}`);
+      toast.success(`Shared with ${shareEmail}`);
       setShareEmail("");
     } catch (err) {
-      setShareMsg(err.message || "Failed to share");
+      const msg = err.message || "Failed to share";
+      setShareMsg(msg);
+      toast.error(msg);
     } finally {
       setSharing(false);
     }
@@ -136,15 +137,15 @@ export default function Editor() {
   }
 
   const toolbarBtn = {
-  border: "1px solid var(--border-color)",
-  background: "var(--bg-card)",
-  borderRadius: 8,
-  width: 34,
-  height: 34,
-  cursor: "pointer",
-  fontSize: 14,
-  color: "var(--text-main)",
-};
+    border: "1px solid var(--border-color)",
+    background: "var(--bg-card)",
+    borderRadius: 8,
+    width: 34,
+    height: 34,
+    cursor: "pointer",
+    fontSize: 14,
+    color: "var(--text-main)",
+  };
 
   if (loading) {
     return (
@@ -164,16 +165,16 @@ export default function Editor() {
           onChange={handleTitleChange}
           placeholder="Untitled document"
           style={{
-  border: "1px solid var(--border-color)",
-  borderRadius: 10,
-  fontSize: 20,
-  fontWeight: 600,
-  outline: "none",
-  flex: 1,
-  background: "var(--bg-elevated)",
-  padding: "10px 14px",
-  color: "var(--text-main)",
-}}
+            border: "1px solid var(--border-color)",
+            borderRadius: 10,
+            fontSize: 20,
+            fontWeight: 600,
+            outline: "none",
+            flex: 1,
+            background: "var(--bg-elevated)",
+            padding: "10px 14px",
+            color: "var(--text-main)",
+          }}
         />
         <button onClick={() => setShowShare((s) => !s)} className="app-btn app-btn-outline" style={{ whiteSpace: "nowrap" }}>
           Share
@@ -215,20 +216,18 @@ export default function Editor() {
             placeholder="Person's email"
             value={shareEmail}
             onChange={(e) => setShareEmail(e.target.value)}
-            style={{ flex: 1, minWidth: 200, padding: "8px 12px", border: "1px solid #dbe3ef", borderRadius: 8, color: "#0f172a" }}
+            style={{ flex: 1, minWidth: 200, padding: "8px 12px", border: "1px solid var(--border-color)", borderRadius: 8, color: "var(--text-main)", background: "var(--bg-card)" }}
           />
-          <select value={shareRole} onChange={(e) => setShareRole(e.target.value)} style={{ padding: "8px 12px", border: "1px solid #dbe3ef", borderRadius: 8 }}>
+          <select value={shareRole} onChange={(e) => setShareRole(e.target.value)} style={{ padding: "8px 12px", border: "1px solid var(--border-color)", borderRadius: 8, background: "var(--bg-card)", color: "var(--text-main)" }}>
             <option value="editor">Can edit</option>
             <option value="viewer">Can view</option>
           </select>
           <button type="submit" className="app-btn app-btn-primary" disabled={sharing}>
             {sharing ? "Sharing…" : "Share"}
           </button>
-          {shareMsg && <span className="text-muted" style={{ width: "100%" }}>{shareMsg}</span>}
         </form>
       )}
 
-      {/* Formatting toolbar */}
       <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
         <button type="button" style={{ ...toolbarBtn, fontWeight: 700 }} onClick={() => format("bold")} title="Bold">B</button>
         <button type="button" style={{ ...toolbarBtn, fontStyle: "italic" }} onClick={() => format("italic")} title="Italic">I</button>
@@ -247,17 +246,17 @@ export default function Editor() {
         onBlur={() => { isTypingRef.current = false; }}
         suppressContentEditableWarning
         style={{
-  width: "100%",
-  minHeight: "60vh",
-  border: "1px solid var(--border-color)",
-  borderRadius: 14,
-  padding: 20,
-  fontSize: 15,
-  lineHeight: 1.6,
-  color: "var(--text-main)",
-  background: "var(--bg-card)",
-  outline: "none",
-}}
+          width: "100%",
+          minHeight: "60vh",
+          border: "1px solid var(--border-color)",
+          borderRadius: 14,
+          padding: 20,
+          fontSize: 15,
+          lineHeight: 1.6,
+          color: "var(--text-main)",
+          background: "var(--bg-card)",
+          outline: "none",
+        }}
       />
     </AppShell>
   );
