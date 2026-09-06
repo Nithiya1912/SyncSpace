@@ -4,7 +4,7 @@ import {
   registerRequest,
   logoutRequest,
   fetchCurrentUser,
-} from "../services/authService";
+}from "../services/authService";
 import { getToken } from "../services/api";
 
 const AuthContext = createContext(null);

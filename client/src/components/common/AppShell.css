@@ -1,123 +1,115 @@
-.shell{
-    min-height:100vh;
-    display:flex;
-    background:var(--bg-main);
+.shell {
+  min-height: 100vh;
+  display: flex;
+  background: var(--bg-main);
 }
 
-.shell-sidebar{
-    width:240px;
-    flex-shrink:0;
-    background:var(--bg-sidebar);
-    color:#e2e8f0;
-    display:flex;
-    flex-direction:column;
-    padding:24px 18px;
+.shell-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px;
 }
 
-.shell-logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:700;
-    font-size:18px;
-    margin-bottom:36px;
+.shell-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 40px;
 }
 
-.shell-logo-mark{
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:16px;
+.shell-logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
 }
 
-.shell-nav{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    flex:1;
+.shell-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
-.shell-nav a{
-    color:#cbd5e1;
-    text-decoration:none;
-    padding:10px 14px;
-    border-radius:10px;
-    font-size:14px;
-    transition:.2s;
+.shell-nav a {
+  color: #9ca3af;
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.15s;
 }
 
-.shell-nav a:hover{
-    background:rgba(255,255,255,.08);
-    color:#fff;
+.shell-nav a:hover {
+  background: rgba(255,255,255,.06);
+  color: #fff;
 }
 
-.shell-theme-toggle{
-    border:1px solid rgba(255,255,255,.15);
-    background:transparent;
-    color:#cbd5e1;
-    padding:10px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:14px;
-    margin-bottom:10px;
-    transition:.2s;
+.shell-theme-toggle,
+.shell-logout {
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.04);
+  color: #cbd5e1;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  transition: 0.15s;
 }
 
-.shell-theme-toggle:hover{
-    background:rgba(255,255,255,.08);
-    color:#fff;
+.shell-theme-toggle:hover,
+.shell-logout:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
 }
 
-.shell-logout{
-    border:1px solid rgba(255,255,255,.15);
-    background:transparent;
-    color:#cbd5e1;
-    padding:10px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:14px;
-    transition:.2s;
+.shell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.shell-logout:hover{
-    background:rgba(255,255,255,.08);
-    color:#fff;
+.shell-topbar {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.shell-main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    min-width:0;
+.shell-topbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
-.shell-topbar{
-    height:70px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 32px;
-    background:var(--bg-card);
-    border-bottom:1px solid var(--border-color);
+.shell-user {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
-.shell-topbar h1{
-    font-size:20px;
-    font-weight:600;
-    color:var(--text-main);
-}
-
-.shell-user{
-    font-size:14px;
-    color:var(--text-muted);
-}
-
-.shell-content{
-    padding:32px;
-    flex:1;
-    color:var(--text-main);
+.shell-content {
+  padding: 36px;
+  flex: 1;
+  color: var(--text-main);
 }
