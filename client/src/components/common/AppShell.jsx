@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import "./AppShell.css";
 
 export default function AppShell({ title, children }) {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -21,6 +23,9 @@ export default function AppShell({ title, children }) {
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/profile">Profile</Link>
         </nav>
+        <button className="shell-theme-toggle" onClick={toggleTheme}>
+          {theme === "light" ? "🌙 Dark mode" : "☀️ Light mode"}
+        </button>
         <button className="shell-logout" onClick={handleLogout}>
           Log out
         </button>
